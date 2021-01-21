@@ -1,0 +1,24 @@
+.container
+  .text-center.mt-3
+    %h3 Add your signature
+  .d-flex.justify-content-md-center.mt-2
+    = form_for @document, html: { class: 'form-center'} do |f|
+      = f.hidden_field :signature, as: :hidden, class: 'signature_pad_input'
+      .signature_pad.text-center
+        .signature_pad_body
+          %canvas
+        .signature_pad_footer
+          .text-muted Sign above
+          %button.btn.btn-default.signature_pad_clear{:type => "button"} Clear
+          = f.submit 'Save', class: 'btn btn-success signature_pad_save'
+  %hr
+  .text-center
+    %h4 Available Signatures
+  .row.mt-0.pt-0
+    - @documents.each do |doc|
+      .col-md-3
+        .border.m-2.p-2.w-100
+          = image_tag(doc.signature, size: '200x100', class: 'w-100')
+          = doc.signed_on.strftime('%d/%m/%Y %H:%M%P')
+        .text-center
+          = link_to 'Use this on a PDF', add_sign_to_pdf_document_path(doc.id), method: :post, class: 'btn btn-sm btn-primary'
