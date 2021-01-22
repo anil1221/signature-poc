@@ -38,7 +38,7 @@ class DocumentsController < ApplicationController
   def document_to_be_signed; end
 
   def signed_document
-    pdf_filename = File.join(Rails.root, "tmp/signed_doc.pdf")
+    pdf_filename = File.join(Rails.root, "public/signed_doc.pdf")
     send_file(pdf_filename, :filename => "signed_doc.pdf", :type => "application/pdf", :disposition => 'inline')
   end
 
