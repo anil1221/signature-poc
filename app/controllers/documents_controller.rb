@@ -22,13 +22,16 @@ class DocumentsController < ApplicationController
     x = Base64.decode64 dataURL[start..-1]
     File.open("#{Rails.root}/public/test1.png",'wb') {|file| file.write x}
 
-    doc = HexaPDF::Document.open("#{Rails.root}/public/sample-pdf-file.pdf")
-    page = doc.pages[0]
-    canvas = page.canvas(type: :overlay)
-    canvas.translate(0, 20) do
-      canvas.line_width(0.5)
-      canvas.opacity(fill_alpha: 1, stroke_alpha: 1) do
-        canvas.image("#{Rails.root}/public/test1.png", at: [400, 400], height: 80)
+    doc = HexaPDF::Document.open("#{Rails.root}/public/investment_doc.pdf")
+    pages = doc.pages
+    pages.each_with_index do |page, i|
+      position = i.eql?(0) ? [320, 148] : [320, 182]
+      canvas = page.canvas(type: :overlay)
+      canvas.translate(0, 20) do
+        canvas.line_width(0.5)
+        canvas.opacity(fill_alpha: 1, stroke_alpha: 1) do
+          canvas.image("#{Rails.root}/public/test1.png", at: position, height: 80)
+        end
       end
     end
     doc.write("#{Rails.root}/public/signed_doc.pdf", optimize: true)
